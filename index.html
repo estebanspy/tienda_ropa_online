@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- SEO básico -->
+  <meta name="description" content="THREAD — Tienda de ropa online. Descubre las últimas colecciones de moda." />
+  <meta name="keywords" content="ropa, moda, tienda online, colecciones, tendencias" />
+  <meta name="author" content="THREAD Store" />
+  <title>THREAD — Moda Online</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Google Fonts: Playfair Display + DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- =====================================================
+       HEADER — position: fixed (siempre visible en top)
+       Criterio: Posicionamiento fijo del encabezado
+  ====================================================== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <!-- Logo -->
+      <a href="#" class="logo" aria-label="THREAD — Ir al inicio">THREAD</a>
+
+      <!-- Navegación principal -->
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul role="list">
+          <li><a href="#nuevos">Nuevos</a></li>
+          <li><a href="#mujer">Mujer</a></li>
+          <li><a href="#hombre">Hombre</a></li>
+          <li><a href="#accesorios">Accesorios</a></li>
+          <li><a href="#sale" class="nav-sale">Sale</a></li>
+        </ul>
+      </nav>
+
+      <!-- Acciones de cabecera -->
+      <div class="header-actions">
+        <!-- Botón búsqueda -->
+        <button class="btn-icon" aria-label="Buscar productos" id="btn-search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+        <!-- Botón perfil -->
+        <button class="btn-icon" aria-label="Mi cuenta">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </button>
+        <!-- Botón carrito (abre sidebar) -->
+        <button class="btn-icon btn-cart" aria-label="Carrito de compras — 3 artículos" id="btn-cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span class="cart-badge" aria-hidden="true">3</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================
+       BARRA DE FILTROS — position: sticky
+       Criterio: Sticky en barra de filtros/nav secundaria
+  ====================================================== -->
+  <div class="filter-bar" role="search" aria-label="Filtrar productos">
+    <div class="filter-bar-inner">
+      <span class="filter-label">Filtrar:</span>
+      <div class="filter-chips">
+        <button class="chip chip--active" aria-pressed="true">Todo</button>
+        <button class="chip" aria-pressed="false">Camisetas</button>
+        <button class="chip" aria-pressed="false">Pantalones</button>
+        <button class="chip" aria-pressed="false">Vestidos</button>
+        <button class="chip" aria-pressed="false">Chaquetas</button>
+        <button class="chip" aria-pressed="false">Accesorios</button>
+      </div>
+      <div class="filter-sort">
+        <label for="sort-select" class="sr-only">Ordenar por</label>
+        <select id="sort-select" aria-label="Ordenar productos">
+          <option>Más relevantes</option>
+          <option>Precio: menor a mayor</option>
+          <option>Precio: mayor a menor</option>
+          <option>Novedades</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       WRAPPER PRINCIPAL — rejilla de 12 columnas
+       Criterio: Grid 12 col + layout general
+  ====================================================== -->
+  <div class="page-wrapper">
+
+    <!-- ===================================================
+         SIDEBAR IZQUIERDO — col 1–3 (3 columnas)
+         Criterio: Menú lateral, box model ajustado
+    ==================================================== -->
+    <aside class="sidebar-left" aria-label="Categorías y filtros">
+
+      <section class="sidebar-section">
+        <h2 class="sidebar-title">Categorías</h2>
+        <ul class="sidebar-list" role="list">
+          <li><a href="#">Mujer <span class="count">(124)</span></a></li>
+          <li><a href="#" class="active">Hombre <span class="count">(98)</span></a></li>
+          <li><a href="#">Niños <span class="count">(56)</span></a></li>
+          <li><a href="#">Accesorios <span class="count">(43)</span></a></li>
+          <li><a href="#">Outlet <span class="count">(31)</span></a></li>
+        </ul>
+      </section>
+
+      <section class="sidebar-section">
+        <h2 class="sidebar-title">Talla</h2>
+        <div class="size-grid">
+          <button class="size-btn" aria-label="Talla XS">XS</button>
+          <button class="size-btn" aria-label="Talla S">S</button>
+          <button class="size-btn size-btn--active" aria-label="Talla M, seleccionada">M</button>
+          <button class="size-btn" aria-label="Talla L">L</button>
+          <button class="size-btn" aria-label="Talla XL">XL</button>
+          <button class="size-btn" aria-label="Talla XXL">XXL</button>
+        </div>
+      </section>
+
+      <section class="sidebar-section">
+        <h2 class="sidebar-title">Precio</h2>
+        <div class="price-range">
+          <input type="range" min="0" max="300" value="150" class="range-slider" aria-label="Precio máximo: 150€" id="price-range" />
+          <div class="price-labels">
+            <span>0 €</span>
+            <span id="price-value">150 €</span>
+            <span>300 €</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="sidebar-section">
+        <h2 class="sidebar-title">Color</h2>
+        <div class="color-swatches">
+          <button class="swatch" style="background:#1a1a1a" aria-label="Negro"></button>
+          <button class="swatch" style="background:#f5f5f0" aria-label="Blanco roto"></button>
+          <button class="swatch" style="background:#8b5e3c" aria-label="Camel"></button>
+          <button class="swatch" style="background:#4a6fa5" aria-label="Azul marino"></button>
+          <button class="swatch" style="background:#c0392b" aria-label="Rojo burdeos"></button>
+          <button class="swatch" style="background:#7d8c7c" aria-label="Salvia"></button>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- ===================================================
+         CONTENIDO PRINCIPAL — col 4–12 (9 columnas)
+         Criterio: Galería con Flexbox + float + clear
+    ==================================================== -->
+    <main class="main-content" id="main-content" role="main">
+
+      <!-- Banner hero interno -->
+      <section class="hero-banner" aria-label="Promoción destacada">
+        <div class="hero-text">
+          <p class="hero-eyebrow">Nueva colección</p>
+          <h1 class="hero-heading">Primavera<br /><em>Verano 2025</em></h1>
+          <a href="#galeria" class="btn-primary">Explorar ahora</a>
+        </div>
+        <!-- Elemento decorativo flotante dentro del banner -->
+        <div class="hero-badge" aria-hidden="true">
+          <span>hasta</span>
+          <strong>−40%</strong>
+          <span>dto.</span>
+        </div>
+      </section>
+
+      <!-- -----------------------------------------------
+           DESTACADOS (float doble columna dentro de main)
+           Criterio: float en columnas + clear al final
+      ------------------------------------------------ -->
+      <section class="featured-section" id="nuevos" aria-label="Productos destacados">
+        <h2 class="section-title">Destacados</h2>
+
+        <!-- Bloque flotante izquierda -->
+        <div class="float-col float-left">
+          <article class="featured-card" aria-label="Producto: Blazer Estructurado">
+            <div class="featured-img featured-img--dark"></div>
+            <div class="featured-info">
+              <h3>Blazer Estructurado</h3>
+              <p>Corte recto, tejido premium italiano</p>
+              <span class="price">129 €</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- Bloque flotante derecha -->
+        <div class="float-col float-right">
+          <article class="featured-card" aria-label="Producto: Trench Clásico">
+            <div class="featured-img featured-img--beige"></div>
+            <div class="featured-info">
+              <h3>Trench Clásico</h3>
+              <p>Impermeable, forro desmontable</p>
+              <span class="price">189 €</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- CLEAR para evitar colapso del contenedor por floats -->
+        <div class="clearfix" aria-hidden="true"></div>
+      </section>
+
+      <!-- -----------------------------------------------
+           GALERÍA DE PRODUCTOS — Flexbox
+           Criterio: Flexbox responsivo + box model
+      ------------------------------------------------ -->
+      <section class="product-gallery" id="galeria" aria-label="Galería de productos">
+        <h2 class="section-title">Toda la colección</h2>
+
+        <div class="gallery-grid" role="list">
+
+          <!-- Producto 1 -->
+          <article class="product-card" role="listitem" aria-label="Camiseta Lino Blanca — 39€">
+            <div class="product-img-wrap">
+              <div class="product-img" style="background:#e8e4de;"></div>
+              <div class="product-overlay" aria-hidden="true">
+                <button class="btn-overlay">Vista rápida</button>
+              </div>
+              <span class="badge badge--new">Nuevo</span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Camiseta Lino</h3>
+              <p class="product-brand">Básicos THREAD</p>
+              <div class="product-footer">
+                <span class="product-price">39 €</span>
+                <button class="btn-add" aria-label="Añadir Camiseta Lino al carrito">+</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 2 -->
+          <article class="product-card" role="listitem" aria-label="Pantalón Chino — 65€">
+            <div class="product-img-wrap">
+              <div class="product-img" style="background:#c4b9a8;"></div>
+              <div class="product-overlay" aria-hidden="true">
+                <button class="btn-overlay">Vista rápida</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Pantalón Chino</h3>
+              <p class="product-brand">Hombre</p>
+              <div class="product-footer">
+                <span class="product-price">65 €</span>
+                <button class="btn-add" aria-label="Añadir Pantalón Chino al carrito">+</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 3 -->
+          <article class="product-card product-card--sale" role="listitem" aria-label="Vestido Midi, rebajado — antes 95€, ahora 57€">
+            <div class="product-img-wrap">
+              <div class="product-img" style="background:#9b8ea0;"></div>
+              <div class="product-overlay" aria-hidden="true">
+                <button class="btn-overlay">Vista rápida</button>
+              </div>
+              <span class="badge badge--sale">−40%</span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Vestido Midi</h3>
+              <p class="product-brand">Mujer</p>
+              <div class="product-footer">
+                <div class="price-group">
+                  <span class="product-price product-price--sale">57 €</span>
+                  <span class="product-price--old">95 €</span>
+                </div>
+                <button class="btn-add" aria-label="Añadir Vestido Midi al carrito">+</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 4 -->
+          <article class="product-card" role="listitem" aria-label="Chaqueta Denim — 89€">
+            <div class="product-img-wrap">
+              <div class="product-img" style="background:#6b8cba;"></div>
+              <div class="product-overlay" aria-hidden="true">
+                <button class="btn-overlay">Vista rápida</button>
+              </div>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Chaqueta Denim</h3>
+              <p class="product-brand">Unisex</p>
+              <div class="product-footer">
+                <span class="product-price">89 €</span>
+                <button class="btn-add" aria-label="Añadir Chaqueta Denim al carrito">+</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 5 -->
+          <article class="product-card" role="listitem" aria-label="Sudadera Crop — 55€">
+            <div class="product-img-wrap">
+              <div class="product-img" style="background:#d4c5b5;"></div>
+              <div class="product-overlay" aria-hidden="true">
+                <button class="btn-overlay">Vista rápida</button>
+              </div>
+              <span class="badge badge--new">Nuevo</span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Sudadera Crop</h3>
+              <p class="product-brand">Mujer</p>
+              <div class="product-footer">
+                <span class="product-price">55 €</span>
+                <button class="btn-add" aria-label="Añadir Sudadera Crop al carrito">+</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Producto 6 -->
+          <article class="product-card product-card--sale" role="listitem" aria-label="Abrigo Lana, rebajado — antes 249€, ahora 174€">
+            <div class="product-img-wrap">
+              <div class="product-img" style="background:#8b7355;"></div>
+              <div class="product-overlay" aria-hidden="true">
+                <button class="btn-overlay">Vista rápida</button>
+              </div>
+              <span class="badge badge--sale">−30%</span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Abrigo Lana</h3>
+              <p class="product-brand">Mujer · Premium</p>
+              <div class="product-footer">
+                <div class="price-group">
+                  <span class="product-price product-price--sale">174 €</span>
+                  <span class="product-price--old">249 €</span>
+                </div>
+                <button class="btn-add" aria-label="Añadir Abrigo Lana al carrito">+</button>
+              </div>
+            </div>
+          </article>
+
+        </div><!-- /.gallery-grid -->
+      </section>
+
+    </main><!-- /.main-content -->
+
+  </div><!-- /.page-wrapper -->
+
+  <!-- =====================================================
+       CARRITO LATERAL — position: fixed (lateral derecho)
+       Criterio: Posicionamiento fijo del carrito
+  ====================================================== -->
+  <aside class="cart-sidebar" id="cart-sidebar" aria-label="Carrito de compras" aria-hidden="true" role="complementary">
+    <div class="cart-header">
+      <h2 class="cart-title">Carrito <span class="cart-count">(3)</span></h2>
+      <button class="btn-close-cart" id="btn-close-cart" aria-label="Cerrar carrito">✕</button>
+    </div>
+
+    <ul class="cart-items" role="list">
+      <li class="cart-item">
+        <div class="cart-item-img" style="background:#e8e4de;" aria-hidden="true"></div>
+        <div class="cart-item-info">
+          <h3>Camiseta Lino</h3>
+          <p>Talla M · Blanco</p>
+          <span>39 €</span>
+        </div>
+        <button class="btn-remove" aria-label="Eliminar Camiseta Lino del carrito">✕</button>
+      </li>
+      <li class="cart-item">
+        <div class="cart-item-img" style="background:#c4b9a8;" aria-hidden="true"></div>
+        <div class="cart-item-info">
+          <h3>Pantalón Chino</h3>
+          <p>Talla M · Beige</p>
+          <span>65 €</span>
+        </div>
+        <button class="btn-remove" aria-label="Eliminar Pantalón Chino del carrito">✕</button>
+      </li>
+      <li class="cart-item">
+        <div class="cart-item-img" style="background:#9b8ea0;" aria-hidden="true"></div>
+        <div class="cart-item-info">
+          <h3>Vestido Midi</h3>
+          <p>Talla S · Lila</p>
+          <span>57 €</span>
+        </div>
+        <button class="btn-remove" aria-label="Eliminar Vestido Midi del carrito">✕</button>
+      </li>
+    </ul>
+
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong>161 €</strong>
+      </div>
+      <button class="btn-checkout">Finalizar compra</button>
+    </div>
+  </aside>
+
+  <!-- Overlay oscuro del carrito -->
+  <div class="cart-overlay" id="cart-overlay" aria-hidden="true"></div>
+
+  <!-- =====================================================
+       MODAL — z-index alto, position: fixed
+       Criterio: z-index para superposición de modal
+  ====================================================== -->
+  <div class="modal-overlay" id="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+      <button class="modal-close" id="modal-close" aria-label="Cerrar modal">✕</button>
+      <div class="modal-img" style="background:#9b8ea0;" aria-hidden="true"></div>
+      <div class="modal-content">
+        <p class="modal-brand">Mujer</p>
+        <h2 class="modal-title" id="modal-title">Vestido Midi</h2>
+        <p class="modal-desc">Tejido fluido de viscosa con caída elegante. Disponible en 4 colores. Tallas XS–XL.</p>
+        <div class="modal-price">
+          <span class="sale-price">57 €</span>
+          <span class="old-price">95 €</span>
+        </div>
+        <div class="modal-sizes">
+          <button class="size-btn">XS</button>
+          <button class="size-btn size-btn--active">S</button>
+          <button class="size-btn">M</button>
+          <button class="size-btn">L</button>
+        </div>
+        <button class="btn-primary btn-modal-add">Añadir al carrito</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       FOOTER — rejilla interna
+       Criterio: Distribución coherente del contenido
+  ====================================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <p class="footer-logo">THREAD</p>
+        <p class="footer-tagline">Moda con propósito.<br />Calidad que dura.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Navegación del pie de página">
+        <div class="footer-col">
+          <h3>Tienda</h3>
+          <ul role="list">
+            <li><a href="#">Nuevas llegadas</a></li>
+            <li><a href="#">Mujer</a></li>
+            <li><a href="#">Hombre</a></li>
+            <li><a href="#">Sale</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Ayuda</h3>
+          <ul role="list">
+            <li><a href="#">Tallas y medidas</a></li>
+            <li><a href="#">Envíos y devoluciones</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Empresa</h3>
+          <ul role="list">
+            <li><a href="#">Sobre nosotros</a></li>
+            <li><a href="#">Sostenibilidad</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Trabaja con nosotros</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="footer-newsletter">
+        <h3>Newsletter</h3>
+        <p>Recibe las últimas novedades y ofertas exclusivas.</p>
+        <form class="newsletter-form" onsubmit="return false;" aria-label="Suscripción al newsletter">
+          <label for="email-input" class="sr-only">Tu dirección de email</label>
+          <input type="email" id="email-input" placeholder="tu@email.com" required autocomplete="email" />
+          <button type="submit" aria-label="Suscribirme al newsletter">→</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 THREAD. Todos los derechos reservados.</p>
+      <div class="footer-legal">
+        <a href="#">Privacidad</a>
+        <a href="#">Cookies</a>
+        <a href="#">Términos</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
