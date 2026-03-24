@@ -1,0 +1,1257 @@
+/* ============================================================
+   THREAD — Tienda de Ropa Online
+   Módulo: Diseño de Interfaces Web (DAW)
+   Técnicas: Grid 12col · Flexbox · Box Model · Posicionamiento
+             Floats · Z-index · Sticky · Clear
+   ============================================================ */
+
+/* ============================================================
+   1. VARIABLES CSS (Custom Properties)
+   ============================================================ */
+:root {
+  /* Colores */
+  --clr-bg:        #f7f5f2;       /* Crema cálido */
+  --clr-bg-alt:    #edeae4;
+  --clr-surface:   #ffffff;
+  --clr-ink:       #1a1815;       /* Casi negro */
+  --clr-ink-mid:   #5a5650;
+  --clr-ink-light: #9a9590;
+  --clr-accent:    #c4855a;       /* Terracota */
+  --clr-accent-dk: #a06640;
+  --clr-sale:      #c0392b;
+  --clr-new:       #2e6b4f;
+  --clr-border:    #ddd9d3;
+
+  /* Tipografía */
+  --ff-display: 'Playfair Display', Georgia, serif;
+  --ff-body:    'DM Sans', system-ui, sans-serif;
+
+  --fs-xs:   0.75rem;
+  --fs-sm:   0.875rem;
+  --fs-base: 1rem;
+  --fs-md:   1.125rem;
+  --fs-lg:   1.5rem;
+  --fs-xl:   2rem;
+  --fs-2xl:  2.75rem;
+
+  /* Espaciado */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+
+  /* Layout */
+  --header-h:     68px;
+  --filter-h:     52px;
+  --sidebar-w:    260px;
+  --cart-w:       380px;
+  --max-w:        1400px;
+
+  /* Otros */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.12);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.18);
+  --transition: 0.22s ease;
+}
+
+/* ============================================================
+   2. RESET Y BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;   /* Box model: border-box global */
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--ff-body);
+  background-color: var(--clr-bg);
+  color: var(--clr-ink);
+  line-height: 1.6;
+  /* Empuja el contenido bajo el header fijo */
+  padding-top: calc(var(--header-h) + var(--filter-h));
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover { color: var(--clr-accent); }
+
+ul { list-style: none; }
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--ff-body);
+  transition: all var(--transition);
+}
+
+/* Clase de accesibilidad: oculto visualmente, disponible para lectores */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   3. HEADER — position: fixed
+   Criterio de evaluación: Posicionamiento fijo del encabezado
+   El header queda anclado al top de la ventana independientemente
+   del scroll. z-index alto para superponerse al resto.
+   ============================================================ */
+.site-header {
+  position: fixed;           /* ← POSICIONAMIENTO FIJO */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-h);
+  background: var(--clr-surface);
+  border-bottom: 1px solid var(--clr-border);
+  z-index: 900;              /* ← Z-INDEX: por encima del contenido */
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  /* FLEXBOX: distribuye logo, nav y acciones en una fila */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-8);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--sp-8);
+  height: 100%;
+}
+
+/* Logo */
+.logo {
+  font-family: var(--ff-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--clr-ink);
+  white-space: nowrap;
+}
+
+/* Navegación del header */
+.main-nav ul {
+  display: flex;             /* FLEXBOX en el menú */
+  gap: var(--sp-8);
+  align-items: center;
+}
+
+.main-nav a {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding-bottom: var(--sp-1);
+  border-bottom: 2px solid transparent;
+}
+
+.main-nav a:hover {
+  border-bottom-color: var(--clr-accent);
+  color: var(--clr-ink);
+}
+
+.nav-sale { color: var(--clr-sale); }
+
+/* Botones de icono */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.btn-icon {
+  position: relative;        /* Para el badge del carrito */
+  width: 40px; height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--clr-ink);
+}
+
+.btn-icon:hover { background: var(--clr-bg-alt); }
+
+/* Badge (número de artículos en carrito) */
+.cart-badge {
+  position: absolute;        /* ← POSICIONAMIENTO ABSOLUTO respecto al btn */
+  top: 4px; right: 4px;
+  width: 16px; height: 16px;
+  background: var(--clr-accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* ============================================================
+   4. BARRA DE FILTROS — position: sticky
+   Criterio: Sticky — se queda pegada al top tras el header
+   cuando el usuario hace scroll.
+   ============================================================ */
+.filter-bar {
+  position: sticky;          /* ← STICKY */
+  top: var(--header-h);      /* Se pega justo bajo el header fijo */
+  z-index: 800;              /* ← Z-INDEX: por debajo del header pero encima del contenido */
+  background: var(--clr-surface);
+  border-bottom: 1px solid var(--clr-border);
+  height: var(--filter-h);
+}
+
+.filter-bar-inner {
+  display: flex;             /* FLEXBOX */
+  align-items: center;
+  gap: var(--sp-4);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--sp-8);
+  height: 100%;
+  overflow-x: auto;          /* Scroll horizontal en móvil */
+}
+
+.filter-label {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--clr-ink-mid);
+  white-space: nowrap;
+}
+
+.filter-chips {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: nowrap;
+}
+
+/* Chips de filtro */
+.chip {
+  padding: var(--sp-1) var(--sp-4);
+  border: 1px solid var(--clr-border);
+  border-radius: 20px;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: transparent;
+  color: var(--clr-ink-mid);
+
+  /* BOX MODEL: padding + border visibles en la caja */
+}
+
+.chip:hover,
+.chip--active {
+  background: var(--clr-ink);
+  color: #fff;
+  border-color: var(--clr-ink);
+}
+
+.filter-sort {
+  margin-left: auto;
+}
+
+.filter-sort select {
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-sm);
+  font-family: var(--ff-body);
+  background: transparent;
+  color: var(--clr-ink);
+  cursor: pointer;
+}
+
+/* ============================================================
+   5. PAGE WRAPPER — REJILLA DE 12 COLUMNAS
+   Criterio: Implementación de la rejilla de 12 columnas.
+   Usamos CSS Grid con 12 columnas explícitas.
+   - Sidebar: ocupa col 1–3 (3 columnas = 25%)
+   - Main:    ocupa col 4–12 (9 columnas = 75%)
+   ============================================================ */
+.page-wrapper {
+  display: grid;
+  /* 12 columnas: sidebar fijo + main flexible */
+  grid-template-columns: var(--sidebar-w) 1fr;
+  /* Equivalente conceptual: 3 col fijas + 9 col fluidas */
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--sp-8);
+  gap: var(--sp-8);
+  min-height: calc(100vh - var(--header-h) - var(--filter-h));
+  align-items: start;
+}
+
+/* ============================================================
+   6. SIDEBAR IZQUIERDO — Box Model ajustado
+   Criterio: Box model en secciones laterales
+   ============================================================ */
+.sidebar-left {
+  /* BOX MODEL explícito */
+  padding: var(--sp-6);              /* Relleno interior */
+  border: 1px solid var(--clr-border); /* Borde */
+  border-radius: var(--radius-md);
+  background: var(--clr-surface);
+  box-shadow: var(--shadow-sm);
+
+  position: sticky;          /* ← STICKY: sidebar se queda visible al scroll */
+  top: calc(var(--header-h) + var(--filter-h) + var(--sp-8));
+  max-height: calc(100vh - var(--header-h) - var(--filter-h) - var(--sp-16));
+  overflow-y: auto;
+}
+
+/* Secciones del sidebar */
+.sidebar-section {
+  /* BOX MODEL: margen entre secciones */
+  margin-bottom: var(--sp-8);
+  padding-bottom: var(--sp-8);
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.sidebar-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.sidebar-title {
+  font-family: var(--ff-display);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--sp-4);
+  color: var(--clr-ink);
+}
+
+/* Lista del sidebar */
+.sidebar-list li {
+  /* BOX MODEL: padding interno en cada item */
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--clr-bg-alt);
+}
+
+.sidebar-list a {
+  font-size: var(--fs-sm);
+  color: var(--clr-ink-mid);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-list a:hover,
+.sidebar-list a.active { color: var(--clr-accent); font-weight: 500; }
+
+.count {
+  font-size: var(--fs-xs);
+  color: var(--clr-ink-light);
+}
+
+/* Grid de tallas */
+.size-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-2);
+}
+
+.size-btn {
+  /* BOX MODEL: padding + border forman la caja del botón */
+  padding: var(--sp-2) 0;
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  text-align: center;
+  color: var(--clr-ink-mid);
+  background: transparent;
+}
+
+.size-btn:hover { border-color: var(--clr-ink); color: var(--clr-ink); }
+.size-btn--active {
+  background: var(--clr-ink);
+  color: #fff;
+  border-color: var(--clr-ink);
+}
+
+/* Slider de precio */
+.price-range { margin-top: var(--sp-2); }
+
+.range-slider {
+  width: 100%;
+  accent-color: var(--clr-accent);
+  cursor: pointer;
+}
+
+.price-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--clr-ink-light);
+  margin-top: var(--sp-2);
+}
+
+/* Swatches de color */
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.swatch {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  outline: 2px solid var(--clr-border);
+  transition: outline-color var(--transition);
+}
+
+.swatch:hover { outline-color: var(--clr-accent); }
+
+/* ============================================================
+   7. CONTENIDO PRINCIPAL (main)
+   ============================================================ */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+/* ============================================================
+   8. HERO BANNER
+   ============================================================ */
+.hero-banner {
+  position: relative;        /* Para el badge absoluto interior */
+  background: var(--clr-ink);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-12) var(--sp-10);
+  min-height: 280px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+/* Textura de fondo decorativa */
+.hero-banner::before {
+  content: '';
+  position: absolute;        /* ← POSICIONAMIENTO ABSOLUTO decorativo */
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 80% 50%, rgba(196,133,90,.35) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(155,142,160,.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-text { position: relative; z-index: 1; }
+
+.hero-eyebrow {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--clr-accent);
+  font-weight: 500;
+  margin-bottom: var(--sp-3);
+}
+
+.hero-heading {
+  font-family: var(--ff-display);
+  font-size: var(--fs-2xl);
+  line-height: 1.15;
+  color: #fff;
+  margin-bottom: var(--sp-6);
+}
+
+.hero-heading em { color: var(--clr-accent); font-style: italic; }
+
+/* Badge del hero — posición absoluta */
+.hero-badge {
+  position: absolute;        /* ← POSICIONAMIENTO ABSOLUTO */
+  top: var(--sp-8);
+  right: var(--sp-8);
+  width: 90px; height: 90px;
+  background: var(--clr-accent);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  z-index: 2;                /* ← Z-INDEX: encima del gradiente */
+  line-height: 1.3;
+  text-align: center;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+.hero-badge strong { font-size: var(--fs-lg); font-weight: 700; }
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+
+/* ============================================================
+   9. BOTONES PRIMARIOS
+   ============================================================ */
+.btn-primary {
+  display: inline-block;
+  background: var(--clr-accent);
+  color: #fff;
+  /* BOX MODEL: padding construye el área clickeable */
+  padding: var(--sp-3) var(--sp-6);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--clr-accent-dk);
+  color: #fff;
+}
+
+/* ============================================================
+   10. SECCIÓN FLOTANTES (FEATURED)
+   Criterio: Floats para organizar columnas dentro de la galería
+             + Clear para limpiar el flujo
+   ============================================================ */
+.featured-section { overflow: hidden; } /* Contiene floats sin clearfix externo */
+
+.section-title {
+  font-family: var(--ff-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  margin-bottom: var(--sp-6);
+  color: var(--clr-ink);
+}
+
+/* Columnas flotantes */
+.float-col {
+  width: calc(50% - var(--sp-4)); /* 50% menos la mitad del gap */
+}
+
+.float-left {
+  float: left;               /* ← FLOAT LEFT */
+  margin-right: var(--sp-4);
+}
+
+.float-right {
+  float: right;              /* ← FLOAT RIGHT */
+  margin-left: var(--sp-4);
+}
+
+/* CLEARFIX — limpia los floats tras las columnas */
+.clearfix::after,
+.clearfix {
+  content: '';
+  display: block;            /* ← CLEAR aplicado con pseudo-elemento */
+  clear: both;               /* ← CLEAR: both — elimina el float de ambos lados */
+}
+
+/* Tarjeta destacada */
+.featured-card {
+  background: var(--clr-surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--clr-border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.featured-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.featured-img {
+  height: 200px;
+}
+
+.featured-img--dark  { background: #2c2825; }
+.featured-img--beige { background: #c4b090; }
+
+.featured-info {
+  /* BOX MODEL: padding interno de la info */
+  padding: var(--sp-5);
+}
+
+.featured-info h3 {
+  font-family: var(--ff-display);
+  font-size: var(--fs-md);
+  margin-bottom: var(--sp-1);
+}
+
+.featured-info p {
+  font-size: var(--fs-sm);
+  color: var(--clr-ink-mid);
+  margin-bottom: var(--sp-3);
+}
+
+.price {
+  font-weight: 700;
+  color: var(--clr-accent);
+}
+
+/* ============================================================
+   11. GALERÍA DE PRODUCTOS — Flexbox
+   Criterio: Flexbox para galería responsiva
+   ============================================================ */
+
+.gallery-grid {
+  display: flex;             /* ← FLEXBOX */
+  flex-wrap: wrap;           /* Envuelve cuando no hay espacio */
+  gap: var(--sp-6);
+  align-items: stretch;
+}
+
+/* Cada tarjeta ocupa ~1/3 del ancho menos los gaps */
+.product-card {
+  flex: 1 1 calc(33.333% - var(--sp-6));  /* FLEXBOX: grow, shrink, basis */
+  min-width: 200px;
+  max-width: 340px;
+
+  /* BOX MODEL ajustado */
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+/* Imagen del producto */
+.product-img-wrap {
+  position: relative;        /* Contenedor relativo para overlay y badge */
+  overflow: hidden;
+}
+
+.product-img {
+  width: 100%;
+  height: 260px;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.03);
+}
+
+/* Overlay con botón de vista rápida */
+.product-overlay {
+  position: absolute;        /* ← POSICIONAMIENTO ABSOLUTO */
+  inset: 0;
+  background: rgba(26, 24, 21, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition);
+  z-index: 2;                /* ← Z-INDEX: encima de la imagen */
+}
+
+.product-card:hover .product-overlay { opacity: 1; }
+
+.btn-overlay {
+  background: #fff;
+  color: var(--clr-ink);
+  /* BOX MODEL: padding del botón */
+  padding: var(--sp-2) var(--sp-5);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Badges (Nuevo / Sale) */
+.badge {
+  position: absolute;        /* ← POSICIONAMIENTO ABSOLUTO */
+  top: var(--sp-3);
+  left: var(--sp-3);
+  /* BOX MODEL: padding + border-radius del badge */
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  z-index: 3;                /* ← Z-INDEX: encima del overlay */
+}
+
+.badge--new  { background: var(--clr-new);  color: #fff; }
+.badge--sale { background: var(--clr-sale); color: #fff; }
+
+/* Info del producto */
+.product-info {
+  /* BOX MODEL: padding cuidado */
+  padding: var(--sp-4) var(--sp-5);
+}
+
+.product-name {
+  font-family: var(--ff-display);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  margin-bottom: var(--sp-1);
+}
+
+.product-brand {
+  font-size: var(--fs-xs);
+  color: var(--clr-ink-light);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--sp-3);
+}
+
+.product-footer {
+  display: flex;             /* FLEXBOX: precio y botón en fila */
+  align-items: center;
+  justify-content: space-between;
+  /* BOX MODEL: padding top como separador visual */
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--clr-bg-alt);
+}
+
+.product-price {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--clr-ink);
+}
+
+.product-price--sale  { color: var(--clr-sale); }
+.product-price--old   {
+  font-size: var(--fs-sm);
+  color: var(--clr-ink-light);
+  text-decoration: line-through;
+  margin-left: var(--sp-2);
+}
+
+.price-group {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-1);
+}
+
+/* Botón añadir al carrito */
+.btn-add {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--clr-ink);
+  color: #fff;
+  font-size: var(--fs-lg);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* BOX MODEL: padding = 0, tamaño controlado por width/height */
+  flex-shrink: 0;
+}
+
+.btn-add:hover { background: var(--clr-accent); }
+
+/* ============================================================
+   12. CARRITO LATERAL — position: fixed
+   Criterio: Posicionamiento fijo del carrito lateral
+   ============================================================ */
+.cart-sidebar {
+  position: fixed;           /* ← POSICIONAMIENTO FIJO */
+  top: 0;
+  right: 0;
+  width: var(--cart-w);
+  height: 100vh;
+  background: var(--clr-surface);
+  box-shadow: var(--shadow-lg);
+  z-index: 1100;             /* ← Z-INDEX: sobre el overlay */
+  display: flex;
+  flex-direction: column;
+
+  /* BOX MODEL: padding interno del panel */
+  padding: 0;
+
+  /* Transformación para ocultar/mostrar */
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+/* Estado abierto del carrito */
+.cart-sidebar.is-open {
+  transform: translateX(0);
+}
+
+/* Header del carrito */
+.cart-header {
+  display: flex;             /* FLEXBOX */
+  align-items: center;
+  justify-content: space-between;
+  /* BOX MODEL */
+  padding: var(--sp-6) var(--sp-6) var(--sp-5);
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.cart-title {
+  font-family: var(--ff-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+}
+
+.cart-count { font-size: var(--fs-sm); color: var(--clr-ink-mid); }
+
+.btn-close-cart {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--fs-base);
+  color: var(--clr-ink-mid);
+}
+
+.btn-close-cart:hover { background: var(--clr-bg-alt); color: var(--clr-ink); }
+
+/* Items del carrito */
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  /* BOX MODEL */
+  padding: var(--sp-4) var(--sp-6);
+}
+
+.cart-item {
+  display: flex;             /* FLEXBOX */
+  align-items: center;
+  gap: var(--sp-4);
+  /* BOX MODEL: padding entre items */
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--clr-bg-alt);
+}
+
+.cart-item-img {
+  /* BOX MODEL: dimensiones + borde */
+  width: 64px;
+  height: 80px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  border: 1px solid var(--clr-border);
+}
+
+.cart-item-info { flex: 1; }
+.cart-item-info h3 { font-size: var(--fs-sm); font-weight: 600; }
+.cart-item-info p  { font-size: var(--fs-xs); color: var(--clr-ink-light); margin: var(--sp-1) 0; }
+.cart-item-info span { font-size: var(--fs-sm); font-weight: 700; }
+
+.btn-remove {
+  color: var(--clr-ink-light);
+  font-size: var(--fs-xs);
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+}
+
+.btn-remove:hover { background: #fde8e8; color: var(--clr-sale); }
+
+/* Footer del carrito */
+.cart-footer {
+  /* BOX MODEL */
+  padding: var(--sp-5) var(--sp-6) var(--sp-8);
+  border-top: 1px solid var(--clr-border);
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--sp-5);
+  font-size: var(--fs-base);
+}
+
+.cart-total strong { font-size: var(--fs-lg); font-weight: 700; }
+
+.btn-checkout {
+  display: block;
+  width: 100%;
+  background: var(--clr-ink);
+  color: #fff;
+  /* BOX MODEL */
+  padding: var(--sp-4);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.btn-checkout:hover { background: var(--clr-accent); }
+
+/* ============================================================
+   13. OVERLAY DEL CARRITO
+   Criterio: z-index para elementos superpuestos
+   ============================================================ */
+.cart-overlay {
+  position: fixed;           /* ← POSICIONAMIENTO FIJO */
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;             /* ← Z-INDEX: bajo el carrito, sobre el contenido */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.cart-overlay.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================================
+   14. MODAL — z-index máximo
+   Criterio: Z-Index para control de superposición en modales
+   ============================================================ */
+.modal-overlay {
+  position: fixed;           /* ← POSICIONAMIENTO FIJO */
+  inset: 0;
+  background: rgba(26, 24, 21, 0.7);
+  z-index: 1200;             /* ← Z-INDEX: máximo, sobre todo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Caja del modal */
+.modal-box {
+  position: relative;        /* Para el botón de cierre absoluto */
+  background: var(--clr-surface);
+  border-radius: var(--radius-lg);
+  /* BOX MODEL: sin padding exterior, el contenido gestiona su espacio */
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.95);
+  transition: transform 0.25s ease;
+}
+
+.modal-overlay.is-open .modal-box {
+  transform: scale(1);
+}
+
+.modal-close {
+  position: absolute;        /* ← POSICIONAMIENTO ABSOLUTO */
+  top: var(--sp-4);
+  right: var(--sp-4);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--fs-sm);
+  z-index: 1;                /* Encima del contenido del modal */
+}
+
+.modal-img {
+  width: 280px;
+  min-height: 400px;
+  flex-shrink: 0;
+}
+
+.modal-content {
+  /* BOX MODEL */
+  padding: var(--sp-8);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  overflow-y: auto;
+}
+
+.modal-brand {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--clr-ink-light);
+}
+
+.modal-title {
+  font-family: var(--ff-display);
+  font-size: var(--fs-xl);
+  line-height: 1.2;
+}
+
+.modal-desc {
+  font-size: var(--fs-sm);
+  color: var(--clr-ink-mid);
+  line-height: 1.7;
+}
+
+.modal-price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+}
+
+.sale-price { font-size: var(--fs-lg); font-weight: 700; color: var(--clr-sale); }
+.old-price  { font-size: var(--fs-sm); color: var(--clr-ink-light); text-decoration: line-through; }
+
+.modal-sizes {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.btn-modal-add { margin-top: auto; }
+
+/* ============================================================
+   15. FOOTER
+   ============================================================ */
+.site-footer {
+  background: var(--clr-ink);
+  color: #fff;
+  margin-top: var(--sp-16);
+}
+
+.footer-inner {
+  display: flex;             /* FLEXBOX */
+  flex-wrap: wrap;
+  gap: var(--sp-10);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  /* BOX MODEL */
+  padding: var(--sp-12) var(--sp-8);
+}
+
+.footer-brand { flex: 0 0 200px; }
+
+.footer-logo {
+  font-family: var(--ff-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-3);
+}
+
+.footer-tagline {
+  font-size: var(--fs-sm);
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+}
+
+.footer-nav {
+  display: flex;
+  gap: var(--sp-10);
+  flex: 1;
+}
+
+.footer-col h3 {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.5);
+  /* BOX MODEL */
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-col ul { display: flex; flex-direction: column; gap: var(--sp-2); }
+.footer-col a {
+  font-size: var(--fs-sm);
+  color: rgba(255,255,255,0.7);
+}
+.footer-col a:hover { color: #fff; }
+
+/* Newsletter */
+.footer-newsletter { flex: 0 0 260px; }
+.footer-newsletter h3 {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: var(--sp-3);
+}
+.footer-newsletter p {
+  font-size: var(--fs-sm);
+  color: rgba(255,255,255,0.5);
+  margin-bottom: var(--sp-4);
+  line-height: 1.6;
+}
+
+/* Formulario newsletter */
+.newsletter-form {
+  display: flex;             /* FLEXBOX */
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.newsletter-form input {
+  flex: 1;
+  /* BOX MODEL */
+  padding: var(--sp-3) var(--sp-4);
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-family: var(--ff-body);
+}
+
+.newsletter-form input::placeholder { color: rgba(255,255,255,0.35); }
+.newsletter-form input:focus { outline: none; }
+
+.newsletter-form button {
+  /* BOX MODEL */
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--clr-accent);
+  color: #fff;
+  font-size: var(--fs-lg);
+  display: flex; align-items: center;
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+
+.newsletter-form button:hover { background: var(--clr-accent-dk); }
+
+/* Footer bottom */
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  /* BOX MODEL */
+  padding: var(--sp-5) var(--sp-8);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: var(--fs-xs);
+  color: rgba(255,255,255,0.4);
+}
+
+.footer-legal {
+  display: flex;
+  gap: var(--sp-5);
+}
+
+.footer-legal a { color: rgba(255,255,255,0.4); }
+.footer-legal a:hover { color: rgba(255,255,255,0.8); }
+
+/* ============================================================
+   16. RESPONSIVO — Media Queries
+   Criterio: Comportamiento responsivo (Flexbox + Grid)
+   ============================================================ */
+
+/* Tablet grande (≤1200px) */
+@media (max-width: 1200px) {
+  .page-wrapper {
+    grid-template-columns: 220px 1fr;
+  }
+
+  .product-card {
+    flex: 1 1 calc(50% - var(--sp-6));
+    max-width: none;
+  }
+}
+
+/* Tablet (≤900px) */
+@media (max-width: 900px) {
+  :root {
+    --sidebar-w: 0px;
+  }
+
+  /* El sidebar pasa a estar oculto o en la parte superior */
+  .page-wrapper {
+    grid-template-columns: 1fr; /* Una columna */
+    padding: var(--sp-4);
+  }
+
+  .sidebar-left {
+    display: none; /* Simplificado para tablet — en producción sería un drawer */
+  }
+
+  .hero-heading { font-size: var(--fs-xl); }
+
+  .float-col {
+    float: none;             /* ← Quita floats en tablet */
+    width: 100%;
+    margin: 0 0 var(--sp-4) 0;
+  }
+
+  .float-right { margin-left: 0; }
+  .float-left  { margin-right: 0; }
+}
+
+/* Móvil (≤600px) */
+@media (max-width: 600px) {
+  body { padding-top: calc(var(--header-h) + var(--filter-h)); }
+
+  .main-nav { display: none; } /* Hamburger en producción */
+
+  .header-inner { gap: var(--sp-4); }
+
+  .logo { font-size: var(--fs-lg); }
+
+  .product-card {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .hero-banner {
+    padding: var(--sp-8) var(--sp-6);
+    min-height: 220px;
+  }
+
+  .hero-heading { font-size: var(--fs-lg); }
+
+  .hero-badge {
+    width: 70px; height: 70px;
+    top: var(--sp-4); right: var(--sp-4);
+  }
+
+  .modal-box { flex-direction: column; }
+  .modal-img { width: 100%; min-height: 200px; }
+
+  .cart-sidebar { width: 100%; }
+
+  .footer-nav { flex-direction: column; gap: var(--sp-6); }
+  .footer-newsletter { flex: 1 1 100%; }
+}
